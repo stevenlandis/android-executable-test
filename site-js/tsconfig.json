@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "es2015",
+    "lib": ["dom"],
+    "strict": true,
+    "moduleResolution": "node",
+    "module": "es2020",
+    "outDir": "./dist",
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "esModuleInterop": true,
+    "isolatedModules": true
+  },
+  "include": ["src", "tests"]
+}
