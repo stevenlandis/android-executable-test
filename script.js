@@ -43,12 +43,14 @@ async function runUpload() {
 async function runRun() {
   await runUpload();
   const env = JSON.parse(await fs.promises.readFile("env.json", "utf8"));
-  const input = `
+  const input =
+    `
 cd /data/local/tmp/dist
 ./kill_active_server
-./start_server ${JSON.stringify(env)}
+./start_server ${JSON.stringify(JSON.stringify(env))}
 exit
-  `;
+  `.trim() + "\n";
+  console.log(input);
   await cmd("echo", input).pipe("adb", "shell").get();
 }
 

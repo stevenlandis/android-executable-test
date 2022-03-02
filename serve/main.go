@@ -23,7 +23,8 @@ type EnvVars struct {
 func main() {
 	reader := bufio.NewReader(os.Stdin)
 	var envVars EnvVars
-	err := json.Unmarshal([]byte(readLine(reader)), &envVars)
+	line := readLine(reader)
+	err := json.Unmarshal([]byte(line), &envVars)
 	if err != nil {
 		log.Fatal(err)
 	}
