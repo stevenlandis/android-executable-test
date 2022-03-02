@@ -1,4 +1,4 @@
-# Arm Test
+# Android Executable Test
 
 This repo is for testing running executables on my kindle fire. Eventually I want to use the kindle as a server that runs in the background to run periodic tasks.
 
