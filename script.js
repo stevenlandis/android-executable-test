@@ -10,13 +10,17 @@ async function main(args) {
   }[cmd](otherArgs));
 }
 
+// const EXECUTABLES = ["serve"];
 const EXECUTABLES = ["serve", "kill_active_server", "top", "start_server"];
 
 async function runBuild() {
   await cmd("mkdir", "-p", "dist").run();
-  process.env.GOOS = "linux";
+  process.env.GOOS = "android";
   process.env.GOARCH = "arm";
   process.env.GOARM = "7";
+  process.env.CC =
+    "/home/island/Android/Sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/linux-x86_64/bin/armv7a-linux-androideabi22-clang";
+  process.env.CGO_ENABLED = "1";
   function buildExe(name) {
     return cmd("go", "build", "-o", `dist/${name}`, `${name}/main.go`).run();
   }
@@ -50,7 +54,6 @@ cd /data/local/tmp/dist
 ./start_server ${JSON.stringify(JSON.stringify(env))}
 exit
   `.trim() + "\n";
-  console.log(input);
   await cmd("echo", input).pipe("adb", "shell").get();
 }
 

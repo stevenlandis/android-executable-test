@@ -32,6 +32,20 @@ func main() {
 	serve(envVars)
 }
 
+// func testHttp() {
+// 	resp, err := http.Get("https://example.com")
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	defer resp.Body.Close()
+
+// 	body, err := ioutil.ReadAll(resp.Body)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	fmt.Println(string(body))
+// }
+
 func readLine(reader *bufio.Reader) string {
 	line, err := reader.ReadString('\n')
 	if err != nil {
@@ -90,7 +104,7 @@ func runCountServer(c chan chan int) {
 	}
 }
 
-func runTimer(env EnvVars) {
+func runTimer(env EnvVars, ) {
 	for {
 		loc := time.FixedZone("UTC-8", -8*60*60)
 		now := time.Now().UnixMilli()
@@ -99,7 +113,7 @@ func runTimer(env EnvVars) {
 			date = time.Date(
 				date.Year(),
 				date.Month(),
-				date.Day()+7,
+				date.Day()+1,
 				date.Hour(),
 				date.Minute(),
 				date.Second(),
@@ -109,16 +123,16 @@ func runTimer(env EnvVars) {
 		}
 		fmt.Println("sleeping until date:", date)
 		time.Sleep(time.Duration(date.UnixMilli()-now)*time.Millisecond + 10*time.Minute)
-		sendText(env)
+		sendText(env, "check epic games")
 	}
 }
 
-func sendText(env EnvVars) {
+func sendText(env EnvVars, message string) {
 	urlStr := "https://api.twilio.com/2010-04-01/Accounts/" + env.TwillioSid + "/Messages.json"
 	msgData := url.Values{}
 	msgData.Set("To", env.ToPhoneNumber)
 	msgData.Set("From", env.FromPhoneNumber)
-	msgData.Set("Body", "hi from fire")
+	msgData.Set("Body", message)
 	msgDataReader := strings.NewReader(msgData.Encode())
 
 	// Create HTTP request client
