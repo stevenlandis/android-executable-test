@@ -104,16 +104,16 @@ func runCountServer(c chan chan int) {
 	}
 }
 
-func runTimer(env EnvVars, ) {
+func runTimer(env EnvVars) {
 	for {
-		loc := time.FixedZone("UTC-8", -8*60*60)
+		loc := time.FixedZone("UTC-8", -7*60*60)
 		now := time.Now().UnixMilli()
 		date := time.Date(2022, time.February, 26, 17, 0, 0, 0, loc)
 		for date.UnixMilli() <= now {
 			date = time.Date(
 				date.Year(),
 				date.Month(),
-				date.Day()+1,
+				date.Day()+7,
 				date.Hour(),
 				date.Minute(),
 				date.Second(),
@@ -122,12 +122,15 @@ func runTimer(env EnvVars, ) {
 			)
 		}
 		fmt.Println("sleeping until date:", date)
-		time.Sleep(time.Duration(date.UnixMilli()-now)*time.Millisecond + 10*time.Minute)
+		for time.Now().UnixMilli() < date.UnixMilli() {
+			time.Sleep(1 * time.Minute)
+		}
 		sendText(env, "check epic games")
 	}
 }
 
 func sendText(env EnvVars, message string) {
+	fmt.Println("sending text")
 	urlStr := "https://api.twilio.com/2010-04-01/Accounts/" + env.TwillioSid + "/Messages.json"
 	msgData := url.Values{}
 	msgData.Set("To", env.ToPhoneNumber)
